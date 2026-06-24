@@ -1,0 +1,97 @@
+[build-system]
+requires = ["hatchling>=1.21"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agentlens"
+version = "0.1.0"
+description = "Chrome DevTools for your AI agents — local-first tracing & observability for Python LLM-agent systems."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.9"
+authors = [{ name = "Piyush Singh Tomar" }]
+keywords = [
+    "llm", "agents", "observability", "tracing", "openai", "anthropic",
+    "langchain", "debugging", "telemetry", "spans",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Debuggers",
+    "Topic :: System :: Monitoring",
+    "Typing :: Typed",
+]
+# The SDK core (tracing) is stdlib-only. fastapi/uvicorn are required so the
+# one-command `agentlens serve` works out of the box, but they are imported
+# lazily inside agentlens.server so `import agentlens` stays light & fast.
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.29",
+]
+
+[project.optional-dependencies]
+openai = ["openai>=1.0"]
+anthropic = ["anthropic>=0.25"]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "pytest-asyncio>=0.23",
+    "httpx>=0.27",
+    "ruff>=0.5",
+    "mypy>=1.10",
+]
+
+[project.urls]
+Homepage = "https://github.com/Ranger222/AgentLens"
+Repository = "https://github.com/Ranger222/AgentLens"
+Issues = "https://github.com/Ranger222/AgentLens/issues"
+
+[project.scripts]
+agentlens = "agentlens.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agentlens"]
+# Ship the built React dashboard (when present) inside the wheel.
+artifacts = ["src/agentlens/_webui/**"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/agentlens", "README.md", "LICENSE"]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+addopts = "-ra -q"
+asyncio_mode = "auto"
+filterwarnings = ["error::DeprecationWarning:agentlens.*"]
+
+[tool.coverage.run]
+source = ["agentlens"]
+branch = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "C4", "SIM"]
+ignore = ["E501"]  # line length handled by formatter; long strings in tests are fine
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B011"]
+
+[tool.mypy]
+python_version = "3.9"
+packages = ["agentlens"]
+mypy_path = "src"
+warn_unused_ignores = true
+warn_redundant_casts = true
+no_implicit_optional = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
