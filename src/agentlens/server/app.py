@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Optional
+from typing import Any
 
 from .._version import __version__
 from ..config import resolve_db_path
@@ -17,7 +17,7 @@ from ..storage.sqlite import SQLiteStorage
 from .schemas import run_detail
 
 
-def find_webui_dir() -> Optional[Path]:
+def find_webui_dir() -> Path | None:
     """Locate the built frontend: packaged ``_webui`` first, then dev ``frontend/dist``."""
     pkg_webui = Path(__file__).resolve().parent.parent / "_webui"
     if (pkg_webui / "index.html").exists():
@@ -44,7 +44,7 @@ border-radius:4px;color:#7dd3fc}}a{{color:#7dd3fc}}h1{{margin-top:0}}</style></h
 <p>Then restart <code>agentlens serve</code>.</p></div></body></html>"""
 
 
-def create_app(db_path: Optional[str] = None) -> "object":
+def create_app(db_path: str | None = None) -> Any:
     """Build and return the FastAPI app bound to ``db_path``."""
     from fastapi import FastAPI, HTTPException, Query
     from fastapi.middleware.cors import CORSMiddleware

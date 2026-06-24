@@ -81,13 +81,19 @@ src = ["src", "tests"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "C4", "SIM"]
-ignore = ["E501"]  # line length handled by formatter; long strings in tests are fine
+ignore = [
+    "E501",   # line length handled by formatter; long strings are fine
+    "SIM105", # `try/except: pass` is intentional for best-effort/never-raise paths
+    "B027",   # Storage.close() is a deliberate optional (non-abstract) override hook
+]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["B011"]
 
 [tool.mypy]
-python_version = "3.9"
+# mypy itself requires a >=3.10 target; runtime 3.9 support is verified by the
+# CI test matrix + ruff's py39 target. Annotations are 3.9-safe (__future__).
+python_version = "3.10"
 packages = ["agentlens"]
 mypy_path = "src"
 warn_unused_ignores = true

@@ -9,20 +9,19 @@ user threading anything through their call signatures.
 from __future__ import annotations
 
 from contextvars import ContextVar, Token
-from typing import Optional
 
 from .models import Run, Span
 
-_current_span: ContextVar[Optional[Span]] = ContextVar("agentlens_current_span", default=None)
-_current_run: ContextVar[Optional[Run]] = ContextVar("agentlens_current_run", default=None)
+_current_span: ContextVar[Span | None] = ContextVar("agentlens_current_span", default=None)
+_current_run: ContextVar[Run | None] = ContextVar("agentlens_current_run", default=None)
 
 
-def current_span() -> Optional[Span]:
+def current_span() -> Span | None:
     """Return the innermost active span in this context, if any."""
     return _current_span.get()
 
 
-def current_run() -> Optional[Run]:
+def current_run() -> Run | None:
     """Return the active run in this context, if any."""
     return _current_run.get()
 
@@ -32,7 +31,7 @@ def push_span(span: Span) -> Token:
     return _current_span.set(span)
 
 
-def pop_span(token: Token, fallback: Optional[Span] = None) -> None:
+def pop_span(token: Token, fallback: Span | None = None) -> None:
     """Restore the previous current span.
 
     ``ContextVar.reset`` raises ``ValueError`` when set and reset happen in
@@ -50,7 +49,7 @@ def push_run(run: Run) -> Token:
     return _current_run.set(run)
 
 
-def pop_run(token: Token, fallback: Optional[Run] = None) -> None:
+def pop_run(token: Token, fallback: Run | None = None) -> None:
     try:
         _current_run.reset(token)
     except (ValueError, LookupError):

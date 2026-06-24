@@ -12,7 +12,6 @@ import os
 import sqlite3
 import threading
 import time
-from typing import Dict, List, Optional
 
 from ..models import ErrorInfo, Run, RunSummary, Span, TokenUsage
 from ..serialization import DEFAULT_MAX_VALUE_LEN, dumps, loads
@@ -64,7 +63,7 @@ class SQLiteStorage(Storage):
         self.max_value_len = max_value_len
         self._lock = threading.RLock()
         # Per-run insertion counter so save_span never does an O(n) COUNT(*).
-        self._seq_counters: Dict[str, int] = {}
+        self._seq_counters: dict[str, int] = {}
         if db_path != ":memory:":
             parent = os.path.dirname(os.path.abspath(db_path))
             os.makedirs(parent, exist_ok=True)
@@ -118,14 +117,14 @@ class SQLiteStorage(Storage):
             )
             self._conn.commit()
 
-    def get_run(self, run_id: str) -> Optional[Run]:
+    def get_run(self, run_id: str) -> Run | None:
         with self._lock:
             row = self._conn.execute(
                 "SELECT * FROM runs WHERE run_id=?", (run_id,)
             ).fetchone()
         return _row_to_run(row) if row else None
 
-    def list_runs(self, *, limit: int = 50, offset: int = 0) -> List[RunSummary]:
+    def list_runs(self, *, limit: int = 50, offset: int = 0) -> list[RunSummary]:
         with self._lock:
             rows = self._conn.execute(
                 """
@@ -211,7 +210,7 @@ class SQLiteStorage(Storage):
             )
             self._conn.commit()
 
-    def get_spans(self, run_id: str) -> List[Span]:
+    def get_spans(self, run_id: str) -> list[Span]:
         with self._lock:
             rows = self._conn.execute(
                 "SELECT * FROM spans WHERE run_id=? ORDER BY start_time ASC, seq ASC",
@@ -219,7 +218,7 @@ class SQLiteStorage(Storage):
             ).fetchall()
         return [_row_to_span(row) for row in rows]
 
-    def get_span(self, run_id: str, span_id: str) -> Optional[Span]:
+    def get_span(self, run_id: str, span_id: str) -> Span | None:
         with self._lock:
             row = self._conn.execute(
                 "SELECT * FROM spans WHERE run_id=? AND span_id=?", (run_id, span_id)
@@ -246,7 +245,7 @@ class SQLiteStorage(Storage):
         self._seq_counters[run_id] = cached + 1
         return cached
 
-    def _enc(self, value: object) -> Optional[str]:
+    def _enc(self, value: object) -> str | None:
         if value is None:
             return None
         return dumps(value, max_len=self.max_value_len)
@@ -272,11 +271,11 @@ class SQLiteStorage(Storage):
         )
 
 
-def _count_models(concat: Optional[str]) -> Dict[str, int]:
+def _count_models(concat: str | None) -> dict[str, int]:
     """Turn a GROUP_CONCAT(model) string into ``{model: count}`` (NULLs skipped by SQL)."""
     if not concat:
         return {}
-    counts: Dict[str, int] = {}
+    counts: dict[str, int] = {}
     for model in concat.split(","):
         model = model.strip()
         if model:

@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import random
 import time
-from typing import List, Optional
 
 from .models import SpanType
 from .spans import span
@@ -55,12 +54,12 @@ def _one_run(question: str) -> None:
         root.set_output("done")
 
 
-def run_demo(db_path: Optional[str] = None, runs: int = 1, seed: Optional[int] = None) -> str:
+def run_demo(db_path: str | None = None, runs: int = 1, seed: int | None = None) -> str:
     """Generate ``runs`` demo runs into the trace DB. Returns the DB path used."""
     if seed is not None:
         random.seed(seed)
     tracer = configure(db_path=db_path)
-    questions: List[str] = [
+    questions: list[str] = [
         "What is agent observability and why does it matter?",
         "Summarize the latest on LLM tracing tools.",
         "How many tokens did my last agent run use?",

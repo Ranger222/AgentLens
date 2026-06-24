@@ -8,19 +8,19 @@ content blocks as output, and ``input_tokens``/``output_tokens`` from
 
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import Any
 
 from ..models import TokenUsage
 from ._common import build_wrapper, get_attr
 
-_PATCHED: Dict[str, Any] = {}
+_PATCHED: dict[str, Any] = {}
 _MARK = "_agentlens_wrapped"
 
 
-def _build_request(kwargs: Dict[str, Any]) -> Dict[str, Any]:
+def _build_request(kwargs: dict[str, Any]) -> dict[str, Any]:
     model = kwargs.get("model")
     messages = kwargs.get("messages")
-    metadata: Dict[str, Any] = {"provider": "anthropic"}
+    metadata: dict[str, Any] = {"provider": "anthropic"}
     if kwargs.get("system"):
         metadata["system"] = kwargs["system"]
     if kwargs.get("max_tokens") is not None:
@@ -33,11 +33,11 @@ def _build_request(kwargs: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def _parse_response(resp: Any) -> Dict[str, Any]:
+def _parse_response(resp: Any) -> dict[str, Any]:
     output: Any = get_attr(resp, "content")
     # Flatten content blocks to text when possible (nicer to read in the UI).
     if isinstance(output, list):
-        texts: List[str] = []
+        texts: list[str] = []
         for block in output:
             text = get_attr(block, "text")
             if text:

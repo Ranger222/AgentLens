@@ -8,16 +8,16 @@ Idempotent; ``uninstrument_openai()`` restores the originals.
 
 from __future__ import annotations
 
-from typing import Any, Dict
+from typing import Any
 
 from ..models import TokenUsage
 from ._common import build_wrapper, get_attr
 
-_PATCHED: Dict[str, Any] = {}
+_PATCHED: dict[str, Any] = {}
 _MARK = "_agentlens_wrapped"
 
 
-def _build_request(kwargs: Dict[str, Any]) -> Dict[str, Any]:
+def _build_request(kwargs: dict[str, Any]) -> dict[str, Any]:
     model = kwargs.get("model")
     messages = kwargs.get("messages")
     return {
@@ -28,11 +28,11 @@ def _build_request(kwargs: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def _scrub(kwargs: Dict[str, Any]) -> Dict[str, Any]:
+def _scrub(kwargs: dict[str, Any]) -> dict[str, Any]:
     return {k: v for k, v in kwargs.items() if k not in {"api_key", "extra_headers"}}
 
 
-def _parse_response(resp: Any) -> Dict[str, Any]:
+def _parse_response(resp: Any) -> dict[str, Any]:
     output: Any = None
     choices = get_attr(resp, "choices") or []
     if choices:

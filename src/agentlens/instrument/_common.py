@@ -13,7 +13,7 @@ from __future__ import annotations
 import functools
 import inspect
 import logging
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Callable
 
 from ..models import SpanType, TokenUsage
 from ..tracer import get_tracer
@@ -23,8 +23,8 @@ logger = logging.getLogger("agentlens")
 # Provider parser signatures:
 #   build_request(kwargs) -> {"name": str, "model": str|None, "input": Any, "metadata": dict}
 #   parse_response(resp)  -> {"output": Any, "usage": TokenUsage|None, "model": str|None}
-BuildRequest = Callable[[Dict[str, Any]], Dict[str, Any]]
-ParseResponse = Callable[[Any], Dict[str, Any]]
+BuildRequest = Callable[[dict[str, Any]], dict[str, Any]]
+ParseResponse = Callable[[Any], dict[str, Any]]
 
 
 def get_attr(obj: Any, key: str, default: Any = None) -> Any:
@@ -44,7 +44,7 @@ def build_wrapper(
 ) -> Callable[..., Any]:
     """Wrap an SDK ``create``-style callable so each call records an ``llm_call`` span."""
 
-    def _start(tracer: Any, kwargs: Dict[str, Any]):  # type: ignore[no-untyped-def]
+    def _start(tracer: Any, kwargs: dict[str, Any]) -> Any:
         try:
             req = build_request(kwargs)
         except Exception:  # noqa: BLE001
@@ -57,7 +57,7 @@ def build_wrapper(
             metadata=req.get("metadata") or {},
         )
 
-    def _finish(tracer: Any, span: Any, kwargs: Dict[str, Any], resp: Any) -> None:  # type: ignore[no-untyped-def]
+    def _finish(tracer: Any, span: Any, kwargs: dict[str, Any], resp: Any) -> None:
         # Streaming responses are lazy iterators; capturing their full output
         # would require consuming them (and could break the caller). For v1 we
         # record the call + mark it streaming, leaving output capture to later.
@@ -66,7 +66,7 @@ def build_wrapper(
             tracer.end_span(span, status="ok")
             return
         output: Any = None
-        usage: Optional[TokenUsage] = None
+        usage: TokenUsage | None = None
         try:
             parsed = parse_response(resp)
             output = parsed.get("output")

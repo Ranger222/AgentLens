@@ -18,7 +18,7 @@ import time
 import traceback
 from contextvars import Token
 from dataclasses import dataclass
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Callable
 
 from . import context as _ctx
 from .config import Config
@@ -37,19 +37,19 @@ class _SpanState:
     span_token: Token
     owns_run: bool
     run: Run
-    run_token: Optional[Token]
-    parent_span: Optional[Span] = None
+    run_token: Token | None
+    parent_span: Span | None = None
 
 
 class Tracer:
-    def __init__(self, config: Config, storage: Optional[Storage] = None) -> None:
+    def __init__(self, config: Config, storage: Storage | None = None) -> None:
         self.config = config
         self._storage = storage
-        self._active: Dict[str, _SpanState] = {}
+        self._active: dict[str, _SpanState] = {}
         # Runs (by id) that have seen at least one errored span — for status rollup.
         self._run_errors: set = set()
         # Tokens for explicitly-started runs (agentlens.run(...)).
-        self._run_tokens: Dict[str, Token] = {}
+        self._run_tokens: dict[str, Token] = {}
         self._announced = False
         self._lock = threading.Lock()
 
@@ -94,9 +94,9 @@ class Tracer:
         *,
         type: str = SpanType.AGENT_STEP,
         input: Any = None,
-        model: Optional[str] = None,
-        metadata: Optional[Dict[str, Any]] = None,
-        run_name: Optional[str] = None,
+        model: str | None = None,
+        metadata: dict[str, Any] | None = None,
+        run_name: str | None = None,
     ) -> Span:
         """Open a span. Creates the run if none is active in this context."""
         now_wall = time.time()
@@ -104,7 +104,7 @@ class Tracer:
 
         run = _ctx.current_run()
         owns_run = False
-        run_token: Optional[Token] = None
+        run_token: Token | None = None
         if run is None:
             run = Run(
                 run_id=new_run_id(),
@@ -147,9 +147,9 @@ class Tracer:
         span: Span,
         *,
         output: Any = None,
-        error: Optional[BaseException] = None,
-        usage: Optional[TokenUsage] = None,
-        status: Optional[str] = None,
+        error: BaseException | None = None,
+        usage: TokenUsage | None = None,
+        status: str | None = None,
     ) -> None:
         """Close a span, persist it, and (if it owns the run) finalize the run."""
         with self._lock:
@@ -196,7 +196,7 @@ class Tracer:
                     _ctx.pop_run(state.run_token)
 
     # ------------------------------------------------------------------ runs
-    def start_run(self, name: Optional[str] = None, *, metadata: Optional[Dict[str, Any]] = None) -> Run:
+    def start_run(self, name: str | None = None, *, metadata: dict[str, Any] | None = None) -> Run:
         """Explicitly open a run so several top-level spans group together."""
         run = Run(
             run_id=new_run_id(),
@@ -211,7 +211,7 @@ class Tracer:
         self._safe(lambda: self.storage.save_run(run))
         return run
 
-    def end_run(self, run: Run, *, error: Optional[BaseException] = None) -> None:
+    def end_run(self, run: Run, *, error: BaseException | None = None) -> None:
         run.end_time = time.time()
         errored = error is not None or run.run_id in self._run_errors
         run.status = SpanStatus.ERROR if errored else SpanStatus.OK
@@ -232,17 +232,17 @@ class Tracer:
 
 
 # --------------------------------------------------------------------- global
-_global_tracer: Optional[Tracer] = None
+_global_tracer: Tracer | None = None
 _global_lock = threading.Lock()
 
 
 def configure(
-    db_path: Optional[str] = None,
+    db_path: str | None = None,
     *,
-    enabled: Optional[bool] = None,
-    capture_io: Optional[bool] = None,
-    max_value_len: Optional[int] = None,
-    storage: Optional[Storage] = None,
+    enabled: bool | None = None,
+    capture_io: bool | None = None,
+    max_value_len: int | None = None,
+    storage: Storage | None = None,
 ) -> Tracer:
     """Configure (and return) the global tracer. Safe to call more than once."""
     global _global_tracer

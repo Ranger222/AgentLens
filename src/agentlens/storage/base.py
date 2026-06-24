@@ -8,7 +8,6 @@ dropped in without touching the SDK core.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import List, Optional
 
 from ..models import Run, RunSummary, Span
 
@@ -31,19 +30,19 @@ class Storage(ABC):
         """Update a span's mutable fields on completion."""
 
     @abstractmethod
-    def list_runs(self, *, limit: int = 50, offset: int = 0) -> List[RunSummary]:
+    def list_runs(self, *, limit: int = 50, offset: int = 0) -> list[RunSummary]:
         """Return run summaries, newest first, with span/error/token rollups."""
 
     @abstractmethod
-    def get_run(self, run_id: str) -> Optional[Run]:
+    def get_run(self, run_id: str) -> Run | None:
         """Return a single run, or ``None`` if not found."""
 
     @abstractmethod
-    def get_spans(self, run_id: str) -> List[Span]:
+    def get_spans(self, run_id: str) -> list[Span]:
         """Return all spans for a run, ordered by (start_time, seq)."""
 
     @abstractmethod
-    def get_span(self, run_id: str, span_id: str) -> Optional[Span]:
+    def get_span(self, run_id: str, span_id: str) -> Span | None:
         """Return a single span within a run, or ``None``."""
 
     @abstractmethod

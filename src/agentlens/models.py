@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import dataclasses
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any
 
 
 class SpanType(str):
@@ -41,9 +41,9 @@ class SpanStatus(str):
 class TokenUsage:
     """LLM token accounting. All fields optional; ``total`` is derived if absent."""
 
-    input_tokens: Optional[int] = None
-    output_tokens: Optional[int] = None
-    total_tokens: Optional[int] = None
+    input_tokens: int | None = None
+    output_tokens: int | None = None
+    total_tokens: int | None = None
 
     def __post_init__(self) -> None:
         if (
@@ -64,7 +64,7 @@ class TokenUsage:
         return dataclasses.asdict(self)
 
     @classmethod
-    def from_dict(cls, d: Optional[dict[str, Any]]) -> Optional[TokenUsage]:
+    def from_dict(cls, d: dict[str, Any] | None) -> TokenUsage | None:
         if not d:
             return None
         return cls(
@@ -80,13 +80,13 @@ class ErrorInfo:
 
     type: str
     message: str
-    traceback: Optional[str] = None
+    traceback: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return dataclasses.asdict(self)
 
     @classmethod
-    def from_dict(cls, d: Optional[dict[str, Any]]) -> Optional[ErrorInfo]:
+    def from_dict(cls, d: dict[str, Any] | None) -> ErrorInfo | None:
         if not d:
             return None
         return cls(
@@ -96,7 +96,7 @@ class ErrorInfo:
         )
 
     @classmethod
-    def from_exception(cls, exc: BaseException, tb: Optional[str] = None) -> ErrorInfo:
+    def from_exception(cls, exc: BaseException, tb: str | None = None) -> ErrorInfo:
         return cls(type=type(exc).__name__, message=str(exc), traceback=tb)
 
 
@@ -113,22 +113,22 @@ class Span:
     run_id: str
     name: str
     type: str = SpanType.AGENT_STEP
-    parent_id: Optional[str] = None
+    parent_id: str | None = None
     start_time: float = 0.0
-    end_time: Optional[float] = None
+    end_time: float | None = None
     status: str = SpanStatus.RUNNING
     input: Any = None
     output: Any = None
-    error: Optional[ErrorInfo] = None
-    usage: Optional[TokenUsage] = None
-    model: Optional[str] = None
+    error: ErrorInfo | None = None
+    usage: TokenUsage | None = None
+    model: str | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
     # Monotonic insertion order within a run; used as a stable tiebreaker when
     # sibling spans share a start_time. Set by the storage layer on insert.
     seq: int = 0
 
     @property
-    def duration_ms(self) -> Optional[float]:
+    def duration_ms(self) -> float | None:
         if self.end_time is None:
             return None
         return max(0.0, (self.end_time - self.start_time) * 1000.0)
@@ -146,15 +146,15 @@ class Span:
         self.output = value
         return self
 
-    def set_model(self, model: Optional[str]) -> Span:
+    def set_model(self, model: str | None) -> Span:
         self.model = model
         return self
 
     def set_usage(
         self,
-        input_tokens: Optional[int] = None,
-        output_tokens: Optional[int] = None,
-        total_tokens: Optional[int] = None,
+        input_tokens: int | None = None,
+        output_tokens: int | None = None,
+        total_tokens: int | None = None,
     ) -> Span:
         self.usage = TokenUsage(
             input_tokens=input_tokens,
@@ -167,7 +167,7 @@ class Span:
         self.metadata.update(kwargs)
         return self
 
-    def record_error(self, exc: BaseException, traceback_str: Optional[str] = None) -> Span:
+    def record_error(self, exc: BaseException, traceback_str: str | None = None) -> Span:
         self.error = ErrorInfo.from_exception(exc, traceback_str)
         self.status = SpanStatus.ERROR
         return self
@@ -198,14 +198,14 @@ class Run:
     """A top-level grouping of spans — one agent execution / session."""
 
     run_id: str
-    name: Optional[str] = None
+    name: str | None = None
     start_time: float = 0.0
-    end_time: Optional[float] = None
+    end_time: float | None = None
     status: str = SpanStatus.RUNNING
     metadata: dict[str, Any] = field(default_factory=dict)
 
     @property
-    def duration_ms(self) -> Optional[float]:
+    def duration_ms(self) -> float | None:
         if self.end_time is None:
             return None
         return max(0.0, (self.end_time - self.start_time) * 1000.0)
@@ -227,18 +227,18 @@ class RunSummary:
     """Lightweight run row for the runs list (no spans), plus rollups."""
 
     run_id: str
-    name: Optional[str]
+    name: str | None
     start_time: float
-    end_time: Optional[float]
+    end_time: float | None
     status: str
     span_count: int = 0
     error_count: int = 0
-    total_tokens: Optional[int] = None
+    total_tokens: int | None = None
     models: dict[str, int] = field(default_factory=dict)
     metadata: dict[str, Any] = field(default_factory=dict)
 
     @property
-    def duration_ms(self) -> Optional[float]:
+    def duration_ms(self) -> float | None:
         if self.end_time is None:
             return None
         return max(0.0, (self.end_time - self.start_time) * 1000.0)

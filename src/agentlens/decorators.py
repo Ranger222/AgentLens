@@ -10,9 +10,9 @@ from __future__ import annotations
 import functools
 import inspect
 import logging
-from typing import Any, Callable, Dict, Optional, TypeVar, Union, cast
+from typing import Any, Callable, TypeVar, cast
 
-from .models import SpanType
+from .models import Span, SpanType
 from .tracer import Tracer, get_tracer
 
 logger = logging.getLogger("agentlens")
@@ -20,7 +20,7 @@ logger = logging.getLogger("agentlens")
 F = TypeVar("F", bound=Callable[..., Any])
 
 
-def _bind_args(fn: Callable[..., Any], args: tuple, kwargs: dict) -> Dict[str, Any]:
+def _bind_args(fn: Callable[..., Any], args: tuple, kwargs: dict) -> dict[str, Any]:
     """Best-effort named argument capture; falls back to positional/keyword dump."""
     try:
         sig = inspect.signature(fn)
@@ -35,20 +35,22 @@ def _bind_args(fn: Callable[..., Any], args: tuple, kwargs: dict) -> Dict[str, A
 
 
 def trace(
-    func: Optional[F] = None,
+    func: F | None = None,
     *,
-    name: Optional[str] = None,
+    name: str | None = None,
     type: str = SpanType.AGENT_STEP,
     capture_input: bool = True,
     capture_output: bool = True,
-) -> Union[F, Callable[[F], F]]:
+) -> F | Callable[[F], F]:
     """Decorate a function so each call is recorded as a span.
 
     Usable bare (``@trace``) or parameterized (``@trace(type="tool_call")``).
     """
 
     def decorator(fn: F) -> F:
-        span_name = name or getattr(fn, "__qualname__", None) or getattr(fn, "__name__", "anonymous")
+        span_name: str = str(
+            name or getattr(fn, "__qualname__", None) or getattr(fn, "__name__", "anonymous")
+        )
 
         def _input(args: tuple, kwargs: dict) -> Any:
             return _bind_args(fn, args, kwargs) if capture_input else None
@@ -67,7 +69,7 @@ def trace(
                     async for item in fn(*args, **kwargs):
                         yield item
                     return
-                err: Optional[Exception] = None
+                err: Exception | None = None
                 try:
                     async for item in fn(*args, **kwargs):
                         yield item
@@ -145,7 +147,7 @@ def trace(
     return decorator
 
 
-def _safe_start(tracer: Tracer, name: str, type: str, input: Any):  # type: ignore[no-untyped-def]
+def _safe_start(tracer: Tracer, name: str, type: str, input: Any) -> Span | None:
     try:
         return tracer.start_span(name, type=type, input=input)
     except Exception:  # noqa: BLE001

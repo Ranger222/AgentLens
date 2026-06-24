@@ -8,8 +8,9 @@ already active in the current context.
 from __future__ import annotations
 
 import logging
+from collections.abc import Iterator
 from contextlib import contextmanager
-from typing import Any, Dict, Iterator, Optional
+from typing import Any
 
 from .models import Run, Span, SpanType, TokenUsage
 from .tracer import get_tracer
@@ -18,7 +19,7 @@ logger = logging.getLogger("agentlens")
 
 
 @contextmanager
-def run(name: Optional[str] = None, *, metadata: Optional[Dict[str, Any]] = None) -> Iterator[Optional[Run]]:
+def run(name: str | None = None, *, metadata: dict[str, Any] | None = None) -> Iterator[Run | None]:
     """Explicitly group several top-level spans into one run.
 
     Optional — the first span you open auto-creates a run. Use this only when you
@@ -38,7 +39,7 @@ def run(name: Optional[str] = None, *, metadata: Optional[Dict[str, Any]] = None
         logger.debug("agentlens: failed to start run", exc_info=True)
         yield None
         return
-    err: Optional[BaseException] = None
+    err: BaseException | None = None
     try:
         yield r
     except Exception as e:
@@ -60,9 +61,9 @@ def span(
     *,
     type: str = SpanType.AGENT_STEP,
     input: Any = None,
-    model: Optional[str] = None,
-    metadata: Optional[Dict[str, Any]] = None,
-    run_name: Optional[str] = None,
+    model: str | None = None,
+    metadata: dict[str, Any] | None = None,
+    run_name: str | None = None,
 ) -> Iterator[Span]:
     """Trace a block of work.
 
@@ -86,7 +87,7 @@ def span(
         yield _detached_span(name, type)
         return
 
-    err: Optional[BaseException] = None
+    err: BaseException | None = None
     try:
         yield s
     except Exception as e:
@@ -101,9 +102,9 @@ def start_span(
     *,
     type: str = SpanType.AGENT_STEP,
     input: Any = None,
-    model: Optional[str] = None,
-    metadata: Optional[Dict[str, Any]] = None,
-    run_name: Optional[str] = None,
+    model: str | None = None,
+    metadata: dict[str, Any] | None = None,
+    run_name: str | None = None,
 ) -> Span:
     """Manually open a span. Pair with :func:`end_span` (same context)."""
     tracer = get_tracer()
@@ -118,9 +119,9 @@ def end_span(
     span: Span,
     *,
     output: Any = None,
-    error: Optional[BaseException] = None,
-    usage: Optional[TokenUsage] = None,
-    status: Optional[str] = None,
+    error: BaseException | None = None,
+    usage: TokenUsage | None = None,
+    status: str | None = None,
 ) -> None:
     """Manually close a span previously opened with :func:`start_span`."""
     tracer = get_tracer()

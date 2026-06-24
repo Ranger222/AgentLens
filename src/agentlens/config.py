@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass, field
-from typing import Optional
 
 from .serialization import DEFAULT_MAX_VALUE_LEN
 
@@ -23,7 +22,7 @@ def _env_bool(name: str, default: bool) -> bool:
     return raw.strip().lower() in {"1", "true", "yes", "on"}
 
 
-def resolve_db_path(db_path: Optional[str] = None) -> str:
+def resolve_db_path(db_path: str | None = None) -> str:
     """Resolve the SQLite path with one shared precedence (SDK and dashboard).
 
     ``explicit arg`` → ``$AGENTLENS_DB`` → ``./agentlens.db`` (if CWD writable)

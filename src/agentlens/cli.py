@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import argparse
 import sys
-from typing import List, Optional
 
 from ._version import __version__
 from .config import resolve_db_path
@@ -136,7 +135,7 @@ def _cmd_info(args: argparse.Namespace) -> int:
     return 0
 
 
-def main(argv: Optional[List[str]] = None) -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
 
