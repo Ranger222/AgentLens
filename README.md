@@ -30,10 +30,22 @@ no accounts, no cloud, and no API keys to try.
 
 ## Demo
 
-<!-- TODO: animated GIF of the dashboard — runs list → click a run → expand the waterfall → open a span's error -->
-<div align="center">
-  <em>📽️ animated demo GIF coming here — for now, run <code>agentlens demo &amp;&amp; agentlens serve</code> to see it live.</em>
-</div>
+The collapsible waterfall — each span positioned by time, coloured by type, with
+the failed `calculator` tool in red:
+
+![AgentLens waterfall timeline](docs/images/waterfall.png)
+
+<details>
+<summary>More screenshots — runs list & span detail</summary>
+
+| Runs list (status, duration, token & model rollups) | Span detail (error-first, with traceback) |
+|---|---|
+| ![Runs list](docs/images/runs-list.png) | ![Span detail](docs/images/span-detail.png) |
+
+</details>
+
+<!-- TODO: replace with an animated GIF of the full flow (runs list → waterfall → span error). -->
+> Reproduce these in ~10 seconds: `agentlens demo && agentlens serve`.
 
 ## Quickstart (under 5 commands)
 
