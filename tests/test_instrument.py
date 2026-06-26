@@ -231,9 +231,23 @@ class TestAnthropic:
 
 
 def test_instrument_without_sdk_raises_helpful_error():
-    # No fake injected and the real packages aren't installed -> clear ImportError.
-    sys.modules.pop("openai", None)
-    with pytest.raises(ImportError, match="pip install openai"):
+    # Simulate the SDK being absent *regardless* of whether it's installed in the
+    # test environment (CI installs the extras): setting the module chain to None
+    # in sys.modules makes the lazy `import` inside instrument_*() raise, which
+    # must surface as a friendly ImportError telling the user what to pip install.
+    from unittest import mock
+
+    openai_blocked = dict.fromkeys(
+        ["openai", "openai.resources", "openai.resources.chat", "openai.resources.chat.completions"]
+    )
+    anthropic_blocked = dict.fromkeys(
+        ["anthropic", "anthropic.resources", "anthropic.resources.messages"]
+    )
+    with mock.patch.dict(sys.modules, openai_blocked), pytest.raises(
+        ImportError, match="pip install openai"
+    ):
         instrument_openai()
-    with pytest.raises(ImportError, match="pip install anthropic"):
+    with mock.patch.dict(sys.modules, anthropic_blocked), pytest.raises(
+        ImportError, match="pip install anthropic"
+    ):
         instrument_anthropic()
