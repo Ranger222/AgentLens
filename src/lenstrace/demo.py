@@ -1,6 +1,6 @@
 """Generate a realistic sample trace so the dashboard has data immediately.
 
-Used by ``agentlens demo``. Requires **no API keys** — it simulates a small
+Used by ``lenstrace demo``. Requires **no API keys** — it simulates a small
 multi-step research agent (nested LLM + tool calls, with one call that errors)
 using short sleeps for lifelike latencies.
 """
@@ -48,7 +48,7 @@ def _one_run(question: str) -> None:
         # 4. Final answer LLM call.
         with span("final_answer", type=SpanType.LLM_CALL, model="gpt-4o", input=question) as s:
             _sleep(0.04, 0.09)
-            s.set_output("AgentLens traces every LLM and tool call in your agent run.")
+            s.set_output("LensTrace traces every LLM and tool call in your agent run.")
             s.set_usage(input_tokens=200, output_tokens=52)
 
         root.set_output("done")

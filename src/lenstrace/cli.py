@@ -1,4 +1,4 @@
-"""``agentlens`` command-line interface.
+"""``lenstrace`` command-line interface.
 
 Subcommands:
   serve   Launch the local dashboard (FastAPI + UI).
@@ -25,16 +25,16 @@ def _add_db_arg(p: argparse.ArgumentParser) -> None:
     p.add_argument(
         "--db",
         default=None,
-        help="Path to the SQLite trace DB (default: $AGENTLENS_DB or ./agentlens.db).",
+        help="Path to the SQLite trace DB (default: $LENSTRACE_DB or ./lenstrace.db).",
     )
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="agentlens",
+        prog="lenstrace",
         description="Chrome DevTools for your AI agents — local-first LLM-agent tracing.",
     )
-    parser.add_argument("--version", action="version", version=f"agentlens {__version__}")
+    parser.add_argument("--version", action="version", version=f"lenstrace {__version__}")
     sub = parser.add_subparsers(dest="command")
 
     p_serve = sub.add_parser("serve", help="Launch the local dashboard.")
@@ -64,7 +64,7 @@ def _cmd_serve(args: argparse.Namespace) -> int:
     db_path = resolve_db_path(args.db)
     url = f"http://{args.host}:{args.port}"
     has_ui = find_webui_dir() is not None
-    print(f"🔍 AgentLens {__version__}")
+    print(f"🔍 LensTrace {__version__}")
     print(f"   trace db : {db_path}")
     print(f"   dashboard: {url}{'' if has_ui else '  (UI not built — serving API + placeholder)'}")
     print("   press Ctrl+C to stop")
@@ -76,9 +76,9 @@ def _cmd_serve(args: argparse.Namespace) -> int:
         # reload requires an import string; expose the app via a factory env hook.
         import os
 
-        os.environ["AGENTLENS_DB"] = db_path
+        os.environ["LENSTRACE_DB"] = db_path
         uvicorn.run(
-            "agentlens.server.app:create_app",
+            "lenstrace.server.app:create_app",
             factory=True,
             host=args.host,
             port=args.port,
@@ -111,7 +111,7 @@ def _cmd_demo(args: argparse.Namespace) -> int:
 
     db_path = run_demo(db_path=args.db, runs=args.runs, seed=args.seed)
     print(f"✅ Generated {args.runs} demo run(s) in {db_path}")
-    print("   View them with:  agentlens serve")
+    print("   View them with:  lenstrace serve")
     return 0
 
 
@@ -121,10 +121,10 @@ def _cmd_info(args: argparse.Namespace) -> int:
     from .storage.sqlite import SQLiteStorage
 
     db_path = resolve_db_path(args.db)
-    print(f"agentlens {__version__}")
+    print(f"lenstrace {__version__}")
     print(f"db path : {db_path}")
     if not os.path.exists(db_path):
-        print("db status: not created yet (run an agent or `agentlens demo`)")
+        print("db status: not created yet (run an agent or `lenstrace demo`)")
         return 0
     store = SQLiteStorage(db_path)
     try:
@@ -143,7 +143,7 @@ def main(argv: list[str] | None = None) -> int:
         parser.print_help()
         return 0
     if args.command == "version":
-        print(f"agentlens {__version__}")
+        print(f"lenstrace {__version__}")
         return 0
     if args.command == "serve":
         return _cmd_serve(args)

@@ -26,7 +26,7 @@ from .ids import new_run_id, new_span_id
 from .models import ErrorInfo, Run, Span, SpanStatus, SpanType, TokenUsage
 from .storage.base import Storage
 
-logger = logging.getLogger("agentlens")
+logger = logging.getLogger("lenstrace")
 
 
 @dataclass
@@ -48,7 +48,7 @@ class Tracer:
         self._active: dict[str, _SpanState] = {}
         # Runs (by id) that have seen at least one errored span — for status rollup.
         self._run_errors: set = set()
-        # Tokens for explicitly-started runs (agentlens.run(...)).
+        # Tokens for explicitly-started runs (lenstrace.run(...)).
         self._run_tokens: dict[str, Token] = {}
         self._announced = False
         self._lock = threading.Lock()
@@ -76,7 +76,7 @@ class Tracer:
             return
         self._announced = True
         try:
-            sys.stderr.write(f"🔍 AgentLens: writing traces to {self.config.db_path}\n")
+            sys.stderr.write(f"🔍 LensTrace: writing traces to {self.config.db_path}\n")
         except Exception:  # noqa: BLE001
             pass
 
@@ -85,7 +85,7 @@ class Tracer:
         try:
             fn()
         except Exception:  # noqa: BLE001 - tracing must never raise into user code
-            logger.debug("agentlens: storage operation failed", exc_info=True)
+            logger.debug("lenstrace: storage operation failed", exc_info=True)
 
     # ---------------------------------------------------------------- spans
     def start_span(

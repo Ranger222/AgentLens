@@ -1,7 +1,7 @@
 """Auto-instrumentation adapters for raw LLM SDKs.
 
 These import the underlying SDK lazily (inside the ``instrument_*`` functions),
-so ``import agentlens`` never requires openai/anthropic to be installed.
+so ``import lenstrace`` never requires openai/anthropic to be installed.
 """
 
 from __future__ import annotations

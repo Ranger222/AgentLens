@@ -2,7 +2,7 @@
 
 ## The build loop
 
-AgentLens v1 was built with a deliberate, repeatable loop:
+LensTrace v1 was built with a deliberate, repeatable loop:
 
 ```
 research (agent-swarm)  →  design brief  →  implement  →  test  →  ./scripts/verify.sh

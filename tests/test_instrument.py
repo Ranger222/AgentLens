@@ -12,8 +12,8 @@ import types
 
 import pytest
 
-from agentlens.instrument.anthropic import instrument_anthropic, uninstrument_anthropic
-from agentlens.instrument.openai import instrument_openai, uninstrument_openai
+from lenstrace.instrument.anthropic import instrument_anthropic, uninstrument_anthropic
+from lenstrace.instrument.openai import instrument_openai, uninstrument_openai
 
 
 # ---------------------------------------------------------------- fake OpenAI

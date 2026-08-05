@@ -1,6 +1,7 @@
 # Original Requirements (verbatim)
 
-> This file preserves the original product brief that kicked off AgentLens, for
+> This file preserves the original product brief that kicked off LensTrace (the
+> brief's "AgentTrace" was the placeholder name it asked to improve on), for
 > traceability. The living design lives in [ARCHITECTURE.md](ARCHITECTURE.md),
 > [DATA_MODEL.md](DATA_MODEL.md) and [WORKFLOW.md](WORKFLOW.md).
 

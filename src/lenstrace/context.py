@@ -12,8 +12,8 @@ from contextvars import ContextVar, Token
 
 from .models import Run, Span
 
-_current_span: ContextVar[Span | None] = ContextVar("agentlens_current_span", default=None)
-_current_run: ContextVar[Run | None] = ContextVar("agentlens_current_run", default=None)
+_current_span: ContextVar[Span | None] = ContextVar("lenstrace_current_span", default=None)
+_current_run: ContextVar[Run | None] = ContextVar("lenstrace_current_run", default=None)
 
 
 def current_span() -> Span | None:

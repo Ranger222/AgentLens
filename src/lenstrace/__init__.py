@@ -1,12 +1,12 @@
-"""AgentLens — Chrome DevTools for your AI agents.
+"""LensTrace — Chrome DevTools for your AI agents.
 
 Local-first tracing & observability for Python LLM-agent systems. Instrument
 with a decorator or context manager, store traces in SQLite, and inspect runs in
-a local web dashboard (``agentlens serve``).
+a local web dashboard (``lenstrace serve``).
 
 Quick start::
 
-    from agentlens import trace, span
+    from lenstrace import trace, span
 
     @trace
     def my_agent(question: str) -> str:

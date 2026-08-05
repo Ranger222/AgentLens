@@ -7,12 +7,12 @@ from dataclasses import dataclass, field
 
 from .serialization import DEFAULT_MAX_VALUE_LEN
 
-DEFAULT_DB_FILENAME = "agentlens.db"
+DEFAULT_DB_FILENAME = "lenstrace.db"
 
-ENV_DB = "AGENTLENS_DB"
-ENV_DISABLED = "AGENTLENS_DISABLED"
-ENV_CAPTURE_IO = "AGENTLENS_CAPTURE_IO"
-ENV_MAX_VALUE_LEN = "AGENTLENS_MAX_VALUE_LEN"
+ENV_DB = "LENSTRACE_DB"
+ENV_DISABLED = "LENSTRACE_DISABLED"
+ENV_CAPTURE_IO = "LENSTRACE_CAPTURE_IO"
+ENV_MAX_VALUE_LEN = "LENSTRACE_MAX_VALUE_LEN"
 
 
 def _env_bool(name: str, default: bool) -> bool:
@@ -25,10 +25,10 @@ def _env_bool(name: str, default: bool) -> bool:
 def resolve_db_path(db_path: str | None = None) -> str:
     """Resolve the SQLite path with one shared precedence (SDK and dashboard).
 
-    ``explicit arg`` → ``$AGENTLENS_DB`` → ``./agentlens.db`` (if CWD writable)
-    → ``~/.agentlens/agentlens.db``.
+    ``explicit arg`` → ``$LENSTRACE_DB`` → ``./lenstrace.db`` (if CWD writable)
+    → ``~/.lenstrace/lenstrace.db``.
 
-    The home-dir fallback prevents the #1 footgun: the SDK writing ``./agentlens.db``
+    The home-dir fallback prevents the #1 footgun: the SDK writing ``./lenstrace.db``
     while ``serve`` reads somewhere else. Both call this resolver.
     """
     if db_path:
@@ -39,7 +39,7 @@ def resolve_db_path(db_path: str | None = None) -> str:
     cwd = os.getcwd()
     if os.access(cwd, os.W_OK):
         return os.path.join(cwd, DEFAULT_DB_FILENAME)
-    return os.path.abspath(os.path.expanduser(os.path.join("~", ".agentlens", DEFAULT_DB_FILENAME)))
+    return os.path.abspath(os.path.expanduser(os.path.join("~", ".lenstrace", DEFAULT_DB_FILENAME)))
 
 
 @dataclass

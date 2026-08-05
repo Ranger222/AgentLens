@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import dataclasses
 
-from agentlens.serialization import (
+from lenstrace.serialization import (
     REDACTED,
     dumps,
     is_secret_key,

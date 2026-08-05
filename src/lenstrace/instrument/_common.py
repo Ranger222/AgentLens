@@ -18,7 +18,7 @@ from typing import Any, Callable
 from ..models import SpanType, TokenUsage
 from ..tracer import get_tracer
 
-logger = logging.getLogger("agentlens")
+logger = logging.getLogger("lenstrace")
 
 # Provider parser signatures:
 #   build_request(kwargs) -> {"name": str, "model": str|None, "input": Any, "metadata": dict}
@@ -74,7 +74,7 @@ def build_wrapper(
             if parsed.get("model"):
                 span.model = parsed["model"]
         except Exception:  # noqa: BLE001
-            logger.debug("agentlens: failed to parse LLM response", exc_info=True)
+            logger.debug("lenstrace: failed to parse LLM response", exc_info=True)
         tracer.end_span(span, output=output, usage=usage)
 
     if inspect.iscoroutinefunction(original):

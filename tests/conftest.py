@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from agentlens.storage.sqlite import SQLiteStorage
-from agentlens.tracer import configure, shutdown
+from lenstrace.storage.sqlite import SQLiteStorage
+from lenstrace.tracer import configure, shutdown
 
 
 @pytest.fixture

@@ -3,7 +3,7 @@ requires = ["hatchling>=1.21"]
 build-backend = "hatchling.build"
 
 [project]
-name = "agentlens"
+name = "lenstrace"
 version = "0.1.0"
 description = "Chrome DevTools for your AI agents — local-first tracing & observability for Python LLM-agent systems."
 readme = "README.md"
@@ -28,8 +28,8 @@ classifiers = [
     "Typing :: Typed",
 ]
 # The SDK core (tracing) is stdlib-only. fastapi/uvicorn are required so the
-# one-command `agentlens serve` works out of the box, but they are imported
-# lazily inside agentlens.server so `import agentlens` stays light & fast.
+# one-command `lenstrace serve` works out of the box, but they are imported
+# lazily inside lenstrace.server so `import lenstrace` stays light & fast.
 dependencies = [
     "fastapi>=0.110",
     "uvicorn[standard]>=0.29",
@@ -50,30 +50,30 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/Ranger222/AgentLens"
-Repository = "https://github.com/Ranger222/AgentLens"
-Issues = "https://github.com/Ranger222/AgentLens/issues"
+Homepage = "https://github.com/Ranger222/LensTrace"
+Repository = "https://github.com/Ranger222/LensTrace"
+Issues = "https://github.com/Ranger222/LensTrace/issues"
 
 [project.scripts]
-agentlens = "agentlens.cli:main"
+lenstrace = "lenstrace.cli:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/agentlens"]
+packages = ["src/lenstrace"]
 # Ship the built React dashboard (when present) inside the wheel.
-artifacts = ["src/agentlens/_webui/**"]
+artifacts = ["src/lenstrace/_webui/**"]
 
 [tool.hatch.build.targets.sdist]
-include = ["src/agentlens", "README.md", "LICENSE"]
+include = ["src/lenstrace", "README.md", "LICENSE"]
 
 [tool.pytest.ini_options]
 minversion = "8.0"
 testpaths = ["tests"]
 addopts = "-ra -q"
 asyncio_mode = "auto"
-filterwarnings = ["error::DeprecationWarning:agentlens.*"]
+filterwarnings = ["error::DeprecationWarning:lenstrace.*"]
 
 [tool.coverage.run]
-source = ["agentlens"]
+source = ["lenstrace"]
 branch = true
 
 [tool.ruff]
@@ -96,7 +96,7 @@ ignore = [
 # mypy itself requires a >=3.10 target; runtime 3.9 support is verified by the
 # CI test matrix + ruff's py39 target. Annotations are 3.9-safe (__future__).
 python_version = "3.10"
-packages = ["agentlens"]
+packages = ["lenstrace"]
 mypy_path = "src"
 warn_unused_ignores = true
 warn_redundant_casts = true

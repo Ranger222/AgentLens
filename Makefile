@@ -33,7 +33,7 @@ test: ## Run Python tests
 	$(VENV)/bin/pytest -q
 
 test-cov: ## Run Python tests with coverage
-	$(VENV)/bin/pytest -q --cov=agentlens --cov-report=term-missing
+	$(VENV)/bin/pytest -q --cov=lenstrace --cov-report=term-missing
 
 frontend-test: ## Run frontend tests
 	cd frontend && npm run test
@@ -42,20 +42,20 @@ frontend-build: ## Build the frontend
 	cd frontend && npm run build
 
 demo: ## Generate sample traces (no API keys)
-	$(VENV)/bin/agentlens demo -n 3
+	$(VENV)/bin/lenstrace demo -n 3
 
 serve: ## Launch the dashboard
-	$(VENV)/bin/agentlens serve
+	$(VENV)/bin/lenstrace serve
 
 verify: ## Run the full verify harness (the green-gate)
 	./scripts/verify.sh
 
 build: frontend-build ## Build a wheel with the UI vendored in
-	rm -rf src/agentlens/_webui && cp -r frontend/dist src/agentlens/_webui
+	rm -rf src/lenstrace/_webui && cp -r frontend/dist src/lenstrace/_webui
 	$(VENV)/bin/python -m build --wheel --no-isolation
-	rm -rf src/agentlens/_webui
+	rm -rf src/lenstrace/_webui
 
 clean: ## Remove build/test artifacts
 	rm -rf dist build .pytest_cache .mypy_cache .ruff_cache htmlcov .coverage \
-	       src/agentlens/_webui src/*.egg-info frontend/dist
+	       src/lenstrace/_webui src/*.egg-info frontend/dist
 	find . -type d -name __pycache__ -not -path '*/node_modules/*' -exec rm -rf {} + 2>/dev/null || true

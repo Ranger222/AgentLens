@@ -68,15 +68,15 @@ yarn-error.log*
 # Frontend build output is committed-vendored into the package at release time only;
 # ignore the live build dir during dev.
 frontend/dist/
-sdk/agentlens/_webui/
+src/lenstrace/_webui/
 
-# ---- AgentLens data ----
+# ---- LensTrace data ----
 # Local trace databases produced by running the SDK / demos.
-*.agentlens.db
-*.agentlens.db-*
-agentlens.db
-agentlens.db-*
-.agentlens/
+*.lenstrace.db
+*.lenstrace.db-*
+lenstrace.db
+lenstrace.db-*
+.lenstrace/
 
 # ---- OS / editor ----
 .DS_Store

@@ -1,12 +1,12 @@
-# Contributing to AgentLens
+# Contributing to LensTrace
 
-Thanks for your interest! AgentLens is MIT-licensed and local-first by design.
+Thanks for your interest! LensTrace is MIT-licensed and local-first by design.
 
 ## Setup
 
 ```bash
-git clone https://github.com/Ranger222/AgentLens
-cd AgentLens
+git clone https://github.com/Ranger222/LensTrace
+cd LensTrace
 make venv && make install && make install-frontend
 ```
 
@@ -22,7 +22,7 @@ Or individual gates: `make lint type test frontend-test`.
 
 ## Guidelines
 
-- **Keep the SDK core stdlib-only.** `import agentlens` must not require
+- **Keep the SDK core stdlib-only.** `import lenstrace` must not require
   third-party packages. Put server deps behind lazy imports, SDK integrations
   behind their own optional extras.
 - **Tracing must never break user code.** Wrap new side effects so a failure
@@ -36,7 +36,7 @@ Or individual gates: `make lint type test frontend-test`.
 ## Project layout
 
 ```
-src/agentlens/      SDK core, storage, instrumentation, server, CLI
+src/lenstrace/      SDK core, storage, instrumentation, server, CLI
 frontend/           React + Vite + TS dashboard
 examples/           runnable, zero-API-key examples
 tests/              pytest suite
@@ -50,5 +50,5 @@ See [docs/WORKFLOW.md](docs/WORKFLOW.md) for the full development loop and
 ## Reporting bugs
 
 Open an issue with a minimal repro. Because everything is local, attaching the
-relevant `agentlens.db` (or the steps to reproduce one via `agentlens demo`)
+relevant `lenstrace.db` (or the steps to reproduce one via `lenstrace demo`)
 makes triage fast.

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from agentlens.models import Run, Span, SpanStatus
-from agentlens.server.schemas import build_span_tree, run_detail
+from lenstrace.models import Run, Span, SpanStatus
+from lenstrace.server.schemas import build_span_tree, run_detail
 
 
 def _s(sid, parent=None, start=0.0, end=1.0):

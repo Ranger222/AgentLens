@@ -1,6 +1,6 @@
 # Architecture
 
-AgentLens is three cooperating pieces around one SQLite file:
+LensTrace is three cooperating pieces around one SQLite file:
 
 ```
    your Python agent                          your browser
@@ -12,7 +12,7 @@ AgentLens is three cooperating pieces around one SQLite file:
           ▼                                          ▼
 ┌────────────────────┐    reads (WAL)    ┌────────────────────┐
 │  SDK core (stdlib) │◄─────────────────►│  FastAPI backend    │
-│  Tracer + Storage  │   agentlens.db    │  (read-only conn)   │
+│  Tracer + Storage  │   lenstrace.db    │  (read-only conn)   │
 └────────────────────┘                   └────────────────────┘
             \________________  SQLite  _______________/
 ```
@@ -23,10 +23,10 @@ network in the hot path.
 
 ## Components
 
-### 1. SDK core — `agentlens` (standard library only)
-Importing `agentlens` pulls in **only the Python standard library**
+### 1. SDK core — `lenstrace` (standard library only)
+Importing `lenstrace` pulls in **only the Python standard library**
 (`contextvars`, `sqlite3`, `dataclasses`, `threading`, `secrets`, …). FastAPI /
-uvicorn are imported lazily inside `agentlens.server`, and `openai` / `anthropic`
+uvicorn are imported lazily inside `lenstrace.server`, and `openai` / `anthropic`
 only inside their instrumentation modules — so adding tracing to an agent never
 forces heavy or unwanted dependencies.
 
@@ -43,7 +43,7 @@ forces heavy or unwanted dependencies.
 | `storage/` | `Storage` ABC + `SQLiteStorage` (WAL, indexes, rollups). |
 | `instrument/` | Idempotent OpenAI & Anthropic auto-instrumentation. |
 
-### 2. Backend — `agentlens.server` (FastAPI)
+### 2. Backend — `lenstrace.server` (FastAPI)
 A thin, **read-only** JSON API over the trace DB plus static serving of the
 built React app. Opens its own SQLite connection on the same file the SDK writes
 to. See [DATA_MODEL.md](DATA_MODEL.md) for the routes.

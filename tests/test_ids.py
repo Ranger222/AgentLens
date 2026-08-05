@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 
-from agentlens.ids import new_run_id, new_span_id
+from lenstrace.ids import new_run_id, new_span_id
 
 _HEX = re.compile(r"^[0-9a-f]+$")
 

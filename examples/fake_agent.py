@@ -1,4 +1,4 @@
-"""A fake multi-step "research agent" traced end-to-end with AgentLens.
+"""A fake multi-step "research agent" traced end-to-end with LensTrace.
 
 Runs with **zero API keys** — the "LLM" is simulated. It shows all three
 instrumentation styles:
@@ -10,7 +10,7 @@ instrumentation styles:
 Run it, then view the trace::
 
     python examples/fake_agent.py
-    agentlens serve
+    lenstrace serve
 """
 
 from __future__ import annotations
@@ -18,8 +18,8 @@ from __future__ import annotations
 import random
 import time
 
-from agentlens import configure, span, trace
-from agentlens.models import SpanType
+from lenstrace import configure, span, trace
+from lenstrace.models import SpanType
 
 
 def fake_llm(prompt: str, *, model: str = "gpt-4o") -> str:
@@ -70,4 +70,4 @@ if __name__ == "__main__":
     answer = research_agent(question)
     print(f"Agent answered: {answer}")
     print(f"\nTrace written to: {db_path}")
-    print("View it with:     agentlens serve")
+    print("View it with:     lenstrace serve")

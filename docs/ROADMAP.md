@@ -10,8 +10,8 @@ A genuinely usable, local-first agent tracer, end-to-end:
 - ✅ Auto-instrumentation for the raw OpenAI & Anthropic SDKs (idempotent).
 - ✅ SQLite storage (WAL), a "run" groups nested spans.
 - ✅ FastAPI backend + React/Vite dashboard: runs list, collapsible
-  waterfall/tree, span detail, dark mode. One command: `agentlens serve`.
-- ✅ `agentlens demo` — real nested-with-error trace, zero API keys.
+  waterfall/tree, span detail, dark mode. One command: `lenstrace serve`.
+- ✅ `lenstrace demo` — real nested-with-error trace, zero API keys.
 - ✅ pip-installable, CLI entry point, 129 Python tests + 15 frontend tests, CI.
 
 ## Deferred (intentional v1 scope cuts, with rationale)
@@ -36,13 +36,13 @@ isolated behind an existing seam, so adopting it later is non-breaking.
 - Search & filter across runs (by status, model, token count, name).
 - Cost estimation from token usage + a pricing table.
 - Virtualized waterfall for runs with hundreds+ of spans.
-- `agentlens export --otlp` and an OpenInference-compatible exporter.
+- `lenstrace export --otlp` and an OpenInference-compatible exporter.
 - Span diffing between two runs.
 
 ## Naming / publishing note
 
-The brand is **AgentLens** and the CLI command stays `agentlens`. **The PyPI
-distribution name `agentlens` is already taken** by an unrelated dormant
+The brand is **LensTrace** and the CLI command stays `lenstrace`. **The PyPI
+distribution name `lenstrace` is already taken** by an unrelated dormant
 package, so publishing requires a different distribution name (the research
-recommends `lenstrace`); the import name and CLI can stay `agentlens`. This
+recommends `lenstrace`); the import name and CLI can stay `lenstrace`. This
 blocks *publishing*, not building or local use. See [PUSHING.md](PUSHING.md).

@@ -15,7 +15,7 @@ export default function App() {
     <div className="app">
       <header className="topbar">
         <span className="brand" onClick={() => setSelectedRunId(null)} style={{ cursor: "pointer" }}>
-          🔍 AgentLens <span className="dim">· traces</span>
+          🔍 LensTrace <span className="dim">· traces</span>
         </span>
         <span className="spacer" />
         {selectedRunId && (

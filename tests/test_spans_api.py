@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import pytest
 
-from agentlens import end_span, run, span, start_span
-from agentlens.models import SpanType
-from agentlens.storage.sqlite import SQLiteStorage
-from agentlens.tracer import configure, shutdown
+from lenstrace import end_span, run, span, start_span
+from lenstrace.models import SpanType
+from lenstrace.storage.sqlite import SQLiteStorage
+from lenstrace.tracer import configure, shutdown
 
 
 class TestSpanContextManager:

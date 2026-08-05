@@ -3,9 +3,9 @@ from __future__ import annotations
 import pytest
 from fastapi.testclient import TestClient
 
-from agentlens.demo import run_demo
-from agentlens.server.app import create_app
-from agentlens.tracer import shutdown
+from lenstrace.demo import run_demo
+from lenstrace.server.app import create_app
+from lenstrace.tracer import shutdown
 
 
 @pytest.fixture

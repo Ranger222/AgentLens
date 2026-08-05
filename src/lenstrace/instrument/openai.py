@@ -14,7 +14,7 @@ from ..models import TokenUsage
 from ._common import build_wrapper, get_attr
 
 _PATCHED: dict[str, Any] = {}
-_MARK = "_agentlens_wrapped"
+_MARK = "_lenstrace_wrapped"
 
 
 def _build_request(kwargs: dict[str, Any]) -> dict[str, Any]:

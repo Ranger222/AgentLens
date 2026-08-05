@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from agentlens._version import __version__
-from agentlens.cli import DEFAULT_PORT, build_parser, main
-from agentlens.storage.sqlite import SQLiteStorage
+from lenstrace._version import __version__
+from lenstrace.cli import DEFAULT_PORT, build_parser, main
+from lenstrace.storage.sqlite import SQLiteStorage
 
 
 class TestParser:

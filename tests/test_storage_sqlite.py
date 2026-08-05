@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import time
 
-from agentlens.models import ErrorInfo, Run, Span, SpanStatus, SpanType, TokenUsage
-from agentlens.storage.sqlite import SQLiteStorage, _count_models
+from lenstrace.models import ErrorInfo, Run, Span, SpanStatus, SpanType, TokenUsage
+from lenstrace.storage.sqlite import SQLiteStorage, _count_models
 
 
 def _run(rid="r1", **kw):

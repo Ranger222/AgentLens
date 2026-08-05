@@ -1,4 +1,4 @@
-"""FastAPI application factory for the AgentLens dashboard.
+"""FastAPI application factory for the LensTrace dashboard.
 
 Serves a JSON API over the SQLite trace store and (when built) the React SPA as
 static files. The app opens its own read-mostly SQLite connection on the same
@@ -22,7 +22,7 @@ def find_webui_dir() -> Path | None:
     pkg_webui = Path(__file__).resolve().parent.parent / "_webui"
     if (pkg_webui / "index.html").exists():
         return pkg_webui
-    # repo root is src/agentlens/server/app.py -> up 4 = repo root
+    # repo root is src/lenstrace/server/app.py -> up 4 = repo root
     repo_dist = Path(__file__).resolve().parents[3] / "frontend" / "dist"
     if (repo_dist / "index.html").exists():
         return repo_dist
@@ -30,18 +30,18 @@ def find_webui_dir() -> Path | None:
 
 
 _PLACEHOLDER_HTML = """<!doctype html><html lang="en"><head><meta charset="utf-8">
-<title>AgentLens</title><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LensTrace</title><meta name="viewport" content="width=device-width, initial-scale=1">
 <style>body{{background:#0b0e14;color:#e6e6e6;font-family:ui-sans-serif,system-ui,sans-serif;
 display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}}
 .card{{max-width:640px;padding:2rem;line-height:1.6}}code{{background:#1a1f2b;padding:.15rem .4rem;
 border-radius:4px;color:#7dd3fc}}a{{color:#7dd3fc}}h1{{margin-top:0}}</style></head>
-<body><div class="card"><h1>🔍 AgentLens API is running</h1>
+<body><div class="card"><h1>🔍 LensTrace API is running</h1>
 <p>The dashboard UI hasn't been built yet. The JSON API is live:</p>
 <ul><li><a href="/api/runs">/api/runs</a> — list runs</li>
 <li><a href="/docs">/docs</a> — interactive API docs</li></ul>
 <p>To build the UI for development:</p>
 <p><code>cd frontend &amp;&amp; npm install &amp;&amp; npm run build</code></p>
-<p>Then restart <code>agentlens serve</code>.</p></div></body></html>"""
+<p>Then restart <code>lenstrace serve</code>.</p></div></body></html>"""
 
 
 def create_app(db_path: str | None = None) -> Any:
@@ -53,7 +53,7 @@ def create_app(db_path: str | None = None) -> Any:
 
     resolved_db = resolve_db_path(db_path)
     app = FastAPI(
-        title="AgentLens",
+        title="LensTrace",
         version=__version__,
         description="Local-first tracing & observability for Python LLM-agent systems.",
     )

@@ -1,9 +1,9 @@
 {
-  "name": "agentlens-frontend",
+  "name": "lenstrace-frontend",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "AgentLens dashboard — collapsible waterfall timeline for agent runs.",
+  "description": "LensTrace dashboard — collapsible waterfall timeline for agent runs.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",

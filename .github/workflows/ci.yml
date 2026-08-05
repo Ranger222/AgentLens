@@ -32,7 +32,7 @@ jobs:
       - name: Mypy
         run: mypy
       - name: Pytest
-        run: pytest -q --cov=agentlens --cov-report=term-missing
+        run: pytest -q --cov=lenstrace --cov-report=term-missing
 
   frontend:
     name: frontend
@@ -75,14 +75,14 @@ jobs:
       - name: Build wheel with vendored UI
         run: |
           python -m pip install --upgrade pip build
-          rm -rf src/agentlens/_webui && cp -r frontend/dist src/agentlens/_webui
+          rm -rf src/lenstrace/_webui && cp -r frontend/dist src/lenstrace/_webui
           python -m build --wheel
       - name: Assert UI is inside the wheel
-        run: python -m zipfile -l dist/agentlens-*.whl | grep -q 'agentlens/_webui/index.html'
+        run: python -m zipfile -l dist/lenstrace-*.whl | grep -q 'lenstrace/_webui/index.html'
       - name: Install wheel in a clean venv and smoke-test the CLI
         run: |
           python -m venv /tmp/clean
-          /tmp/clean/bin/pip install dist/agentlens-*.whl
-          /tmp/clean/bin/agentlens version
-          /tmp/clean/bin/agentlens demo --db /tmp/smoke.db -n 1 --seed 1
-          /tmp/clean/bin/agentlens info --db /tmp/smoke.db
+          /tmp/clean/bin/pip install dist/lenstrace-*.whl
+          /tmp/clean/bin/lenstrace version
+          /tmp/clean/bin/lenstrace demo --db /tmp/smoke.db -n 1 --seed 1
+          /tmp/clean/bin/lenstrace info --db /tmp/smoke.db

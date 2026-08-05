@@ -21,7 +21,7 @@ class TracedThreadPoolExecutor(ThreadPoolExecutor):
 
     Use it exactly like the stdlib executor::
 
-        from agentlens import TracedThreadPoolExecutor
+        from lenstrace import TracedThreadPoolExecutor
 
         with TracedThreadPoolExecutor() as pool:
             pool.submit(traced_worker, arg)   # nests under the current span

@@ -4,8 +4,8 @@ import asyncio
 
 import pytest
 
-from agentlens import trace
-from agentlens.models import SpanType
+from lenstrace import trace
+from lenstrace.models import SpanType
 
 
 def _only_span(store):
@@ -182,8 +182,8 @@ class TestFailSilent:
         assert f() == "ok"
 
     def test_disabled_tracer_runs_user_code_without_spans(self):
-        from agentlens.storage.sqlite import SQLiteStorage
-        from agentlens.tracer import configure, shutdown
+        from lenstrace.storage.sqlite import SQLiteStorage
+        from lenstrace.tracer import configure, shutdown
 
         s = SQLiteStorage(":memory:")
         configure(storage=s, enabled=False)

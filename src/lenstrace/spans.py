@@ -15,7 +15,7 @@ from typing import Any
 from .models import Run, Span, SpanType, TokenUsage
 from .tracer import get_tracer
 
-logger = logging.getLogger("agentlens")
+logger = logging.getLogger("lenstrace")
 
 
 @contextmanager
@@ -36,7 +36,7 @@ def run(name: str | None = None, *, metadata: dict[str, Any] | None = None) -> I
     try:
         r = tracer.start_run(name, metadata=metadata)
     except Exception:  # noqa: BLE001
-        logger.debug("agentlens: failed to start run", exc_info=True)
+        logger.debug("lenstrace: failed to start run", exc_info=True)
         yield None
         return
     err: BaseException | None = None
@@ -83,7 +83,7 @@ def span(
             name, type=type, input=input, model=model, metadata=metadata, run_name=run_name
         )
     except Exception:  # noqa: BLE001 - never let instrumentation break the caller
-        logger.debug("agentlens: failed to start span", exc_info=True)
+        logger.debug("lenstrace: failed to start span", exc_info=True)
         yield _detached_span(name, type)
         return
 

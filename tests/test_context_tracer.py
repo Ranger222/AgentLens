@@ -6,8 +6,8 @@ from __future__ import annotations
 import asyncio
 import threading
 
-from agentlens import TracedThreadPoolExecutor, span
-from agentlens.context import current_run, current_span
+from lenstrace import TracedThreadPoolExecutor, span
+from lenstrace.context import current_run, current_span
 
 
 def _spans(store):

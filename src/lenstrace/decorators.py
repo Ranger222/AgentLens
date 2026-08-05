@@ -15,7 +15,7 @@ from typing import Any, Callable, TypeVar, cast
 from .models import Span, SpanType
 from .tracer import Tracer, get_tracer
 
-logger = logging.getLogger("agentlens")
+logger = logging.getLogger("lenstrace")
 
 F = TypeVar("F", bound=Callable[..., Any])
 
@@ -151,5 +151,5 @@ def _safe_start(tracer: Tracer, name: str, type: str, input: Any) -> Span | None
     try:
         return tracer.start_span(name, type=type, input=input)
     except Exception:  # noqa: BLE001
-        logger.debug("agentlens: failed to start span for %s", name, exc_info=True)
+        logger.debug("lenstrace: failed to start span for %s", name, exc_info=True)
         return None

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from agentlens.models import ErrorInfo, Run, RunSummary, Span, SpanStatus, SpanType, TokenUsage
+from lenstrace.models import ErrorInfo, Run, RunSummary, Span, SpanStatus, SpanType, TokenUsage
 
 
 class TestTokenUsage:

@@ -32,7 +32,7 @@ export function RunList({ onSelect }: { onSelect: (runId: string) => void }) {
         <div style={{ fontSize: 32 }}>🔍</div>
         <h2>No runs yet</h2>
         <p className="muted">
-          Generate a sample trace with <code>agentlens demo</code>, or instrument your
+          Generate a sample trace with <code>lenstrace demo</code>, or instrument your
           agent with <code>@trace</code> and run it.
         </p>
         <button className="btn" onClick={reload}>
