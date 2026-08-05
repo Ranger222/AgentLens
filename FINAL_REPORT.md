@@ -116,7 +116,7 @@ All severities below are judged in the **local-first, 127.0.0.1, single-user** t
 
 #### S-4. Local git config credential helper echoes `$GITHUB_PAT`
 - **Location:** `.git/config` `[credential] helper`
-- **What:** The repo's **local** git config defines `helper = "!f() { echo username=x-access-token; echo \"password=$GITHUB_PAT\"; }; f"`, unconditionally echoing `$GITHUB_PAT` into git's credential flow. `docs/PUSHING.md` documents this pattern.
+- **What:** The repo's **local** git config defines `helper = "!f() { echo username=x-access-token; echo \"password=$GITHUB_PAT\"; }; f"`, unconditionally echoing `$GITHUB_PAT` into git's credential flow.
 - **Why it matters (local-first):** `.git/config` is inherently **untracked** (it lives in `.git/`, never indexed), so it ships nothing to clones and exposes nothing downstream. The configured remote is SSH (`git@github.com:Ranger222/LensTrace.git`), and SSH transport does not invoke credential helpers, so the helper is currently dormant. Residual risk: the helper is unscoped (no host binding / `useHttpPath`), so any **HTTPS** remote git contacts (a typo'd or malicious HTTPS remote) would receive the token. Developer-local hygiene only; token is described as read-only/fine-grained.
 - **Fix:** Prefer SSH/`gh auth` and delete the helper (`git config --unset-all credential.helper`), since the remote is already SSH. If HTTPS pushes are needed, scope the helper per-URL under `[credential "https://github.com"]` with `useHttpPath = true`. Keep `GITHUB_PAT` minimally scoped. No change to shipped artifacts needed.
 

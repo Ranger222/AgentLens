@@ -41,8 +41,7 @@ isolated behind an existing seam, so adopting it later is non-breaking.
 
 ## Naming / publishing note
 
-The brand is **LensTrace** and the CLI command stays `lenstrace`. **The PyPI
-distribution name `lenstrace` is already taken** by an unrelated dormant
-package, so publishing requires a different distribution name (the research
-recommends `lenstrace`); the import name and CLI can stay `lenstrace`. This
-blocks *publishing*, not building or local use. See [PUSHING.md](PUSHING.md).
+The brand is **LensTrace** and the CLI command is `lenstrace`. The project was
+renamed from its original name (whose PyPI package was already taken by an
+unrelated project) to **LensTrace** — the `lenstrace` distribution/import name
+is verified available on PyPI, npm, and GitHub, so nothing blocks publishing.

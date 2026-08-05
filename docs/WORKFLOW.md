@@ -75,10 +75,9 @@ Skip slow steps with `SKIP_FRONTEND=1`, `SKIP_PACKAGING=1`, `SKIP_E2E=1`.
 
 ## Git / branch strategy
 
-Work happens on **`build/v1`**; `main` is reached via a reviewed **pull
-request**, never a direct push. CI gates the PR. To publish your commits and
-open/maintain the PR, see **[PUSHING.md](PUSHING.md)** (covers the credential
-setup the dashboard build needs).
+Work happens on **`build/v1`**; `main` is updated once CI is green (via a
+reviewed PR when collaborating). CI (`.github/workflows/ci.yml`) runs the same
+gates as `scripts/verify.sh`.
 
 ## Commit conventions
 
